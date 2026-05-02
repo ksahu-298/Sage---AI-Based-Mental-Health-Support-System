@@ -842,4 +842,5 @@ if __name__ == '__main__':
     print("🤖 AI Engine: Groq Llama 3 (70B)")
     print("="*60 + "\n")
     
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
