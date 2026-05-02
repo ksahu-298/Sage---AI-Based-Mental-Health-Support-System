@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Sage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8f3e6,#d4e8d0);min-height:100vh;display:flex;align-items:center;justify-content:center}
+        .login-card{background:white;border-radius:2rem;padding:2rem;width:450px;max-width:90%;box-shadow:0 20px 40px rgba(0,0,0,0.1)}
+        .logo{text-align:center;margin-bottom:1.5rem}
+        .logo h1{color:#2D6A4F;font-size:2rem}
+        .google-btn{width:100%;padding:0.8rem;background:white;border:1px solid #D4E0D0;border-radius:1rem;font-size:1rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1rem}
+        .google-btn:hover{background:#F5F7F2;border-color:#2D6A4F}
+        .divider{text-align:center;margin:1rem 0;color:#8A9A8A;position:relative}
+        .divider::before,.divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:#E2E8E0}
+        .divider::before{left:0}
+        .divider::after{right:0}
+        input{width:100%;padding:0.8rem;margin:0.5rem 0;border:1px solid #D4E0D0;border-radius:1rem;font-family:'Inter',sans-serif}
+        input:focus{outline:none;border-color:#2D6A4F}
+        .continue-btn{width:100%;padding:0.8rem;background:#2D6A4F;color:white;border:none;border-radius:1rem;font-size:1rem;font-weight:600;cursor:pointer;margin-top:1rem}
+        .continue-btn:hover{background:#1B4D3E}
+        .switch-mode{text-align:center;margin-top:1rem;color:#6B7E6B}
+        .switch-mode a{color:#2D6A4F;cursor:pointer;text-decoration:none;font-weight:600}
+        .error{color:#DC2626;font-size:0.8rem;margin-top:0.5rem;text-align:center}
+        .dev-badge{text-align:center;margin-top:1rem;font-size:0.7rem;color:#B0C4A0}
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo">
+            <h1>🌿 Sage</h1>
+        </div>
+        
+        <button class="google-btn" id="googleLoginBtn">
+            <i class="fab fa-google"></i> Continue with Google
+        </button>
+        
+        <div class="divider">or</div>
+        
+        <input type="text" id="username" placeholder="Username" value="testuser">
+        <input type="password" id="password" placeholder="Password" value="pass123">
+        <button class="continue-btn" id="loginBtn">Sign in</button>
+        
+        <div class="switch-mode">
+            <span id="switchText">Don't have an account?</span>
+            <a id="switchLink">Sign up</a>
+        </div>
+        
+        <div id="error" class="error"></div>
+        <div class="dev-badge">Development mode</div>
+    </div>
+
+    <script>
+        document.getElementById('googleLoginBtn').onclick = function() {
+            window.location.href = 'http://localhost:5000/api/auth/google';
+        };
+        
+        const API_URL = 'http://localhost:5000/api';
+        let isLoginMode = true;
+        
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+        if (error === 'google_auth_failed') {
+            document.getElementById('error').innerText = 'Google sign-in failed. Please try again.';
+        } else if (error === 'google_oauth_not_configured') {
+            document.getElementById('error').innerText = 'Google OAuth is not configured on the server yet.';
+        }
+        
+        document.getElementById('loginBtn').onclick = async function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const endpoint = isLoginMode ? `${API_URL}/auth/login` : `${API_URL}/auth/register`;
+            
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    if (username === 'testuser' && password === 'pass123') {
+                        localStorage.setItem('token', 'demo-token');
+                        localStorage.setItem('user', JSON.stringify({ username: 'testuser' }));
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        document.getElementById('error').innerText = data.error || 'Invalid credentials';
+                    }
+                }
+            } catch(error) {
+                if (username === 'testuser' && password === 'pass123') {
+                    localStorage.setItem('token', 'demo-token');
+                    localStorage.setItem('user', JSON.stringify({ username: 'testuser' }));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    document.getElementById('error').innerText = 'Connection error. Make sure backend is running.';
+                }
+            }
+        };
+        
+        document.getElementById('switchLink').onclick = function() {
+            isLoginMode = !isLoginMode;
+            const btn = document.getElementById('loginBtn');
+            const switchText = document.getElementById('switchText');
+            
+            if (isLoginMode) {
+                btn.innerText = 'Sign in';
+                switchText.innerText = "Don't have an account?";
+            } else {
+                btn.innerText = 'Sign up';
+                switchText.innerText = 'Already have an account?';
+            }
+        };
+    </script>
+</body>
+</html>

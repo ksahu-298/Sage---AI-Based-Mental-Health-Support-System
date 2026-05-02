@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Chat with Sage | Mental Health Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F5F7F2;
+            color: #2D3E2D;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: white;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid #E2E8E0;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2D6A4F, #40916C);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4A5B4A;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #2D6A4F;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid #D4E0D0;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            color: #4A5B4A;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .action-btn:hover {
+            background: #FEE2E2;
+            border-color: #DC2626;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid #D4E0D0;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            color: #4A5B4A;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        /* Suggested Prompts */
+        .suggested-prompts {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+
+        .prompt-chip {
+            background: white;
+            border: 1px solid #D4E0D0;
+            border-radius: 40px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .prompt-chip:hover {
+            background: #2D6A4F;
+            color: white;
+            border-color: #2D6A4F;
+        }
+
+        /* Messages Area */
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #FAFBF8;
+            border-radius: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .chat-day-banner {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #5c6d5c;
+            padding: 0.4rem 0.85rem;
+            margin-bottom: 0.85rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 999px;
+            border: 1px solid #e2e8e0;
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-message {
+            align-items: flex-end;
+        }
+
+        .bot-message {
+            align-items: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 1rem 1.2rem;
+            border-radius: 1.5rem;
+            word-wrap: break-word;
+        }
+
+        .user-message .message-bubble {
+            background: #2D6A4F;
+            color: white;
+            border-radius: 1.5rem 1.5rem 0.25rem 1.5rem;
+        }
+
+        .bot-message .message-bubble {
+            background: white;
+            color: #2D3E2D;
+            border: 1px solid #E2E8E0;
+            border-radius: 1.5rem 1.5rem 1.5rem 0.25rem;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #8A9A8A;
+            margin-top: 0.3rem;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.3rem;
+        }
+
+        .sentiment-btn {
+            background: transparent;
+            border: 1px solid #2D6A4F;
+            color: #2D6A4F;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .sentiment-btn:hover {
+            background: #2D6A4F;
+            color: white;
+        }
+
+        .xai-btn {
+            background: transparent;
+            border: none;
+            color: #8A9A8A;
+            font-size: 0.7rem;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+        }
+
+        .xai-btn:hover {
+            background: #E2E8E0;
+        }
+
+        .explanation-box {
+            background: #F0F4ED;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #4A5B4A;
+            max-width: 80%;
+        }
+
+        .sentiment-inline-box {
+            background: #eef6fb;
+            border: 1px solid #d4e5f0;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            margin-top: 0.35rem;
+            font-size: 0.75rem;
+            color: #4A5B4A;
+            max-width: 80%;
+            align-self: flex-end;
+        }
+
+        .user-message .message-actions {
+            margin-top: 0.15rem;
+        }
+
+        /* Input Area */
+        .input-area {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 2rem;
+            border: 1px solid #E2E8E0;
+            flex-shrink: 0;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 0.9rem;
+            border: none;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            background: transparent;
+        }
+
+        .input-area button {
+            background: #2D6A4F;
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 0.3rem;
+            padding: 0.8rem 1.2rem;
+            background: white;
+            border-radius: 1.5rem;
+            border: 1px solid #E2E8E0;
+            align-self: flex-start;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #8A9A8A;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+            .message-bubble {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-leaf"></i> Sage
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="chat.html" class="active">Chat</a>
+            <a href="journal.html">Journal</a>
+            <a href="helplines.html">Helplines</a>
+            <button class="action-btn" onclick="clearChatHistory()">🗑️ Clear Chats</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="chat-container">
+        <div class="suggested-prompts">
+            <div class="prompt-chip" onclick="sendSuggestedMessage('Feeling anxious about exams')">📚 Exam stress check in</div>
+            <div class="prompt-chip" onclick="sendSuggestedMessage('I feel overwhelmed today')">😔 Feeling overwhelmed</div>
+            <div class="prompt-chip" onclick="sendSuggestedMessage('I need help with anxiety')">😰 Need anxiety support</div>
+            <div class="prompt-chip" onclick="sendSuggestedMessage('Feeling sad and lonely')">💙 Feeling down</div>
+        </div>
+
+        <div class="messages-area" id="messagesArea">
+            <div class="message bot-message">
+                <div class="message-bubble">
+                    🌿 Hello! I'm Sage, your mental wellness companion. I'm here to listen without judgment. How are you feeling today?
+                </div>
+                <div class="message-time">Just now</div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="messageInput" placeholder="Share what's on your mind..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let isTyping = false;
+
+        // Check authentication
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ==================== MESSAGE DISPLAY ====================
+
+        function addMessage(text, role, explanation = null, timestamp = null, messageId = null, sentimentSnapshot = null) {
+            const messagesArea = document.getElementById('messagesArea');
+            const messageDiv = document.createElement('div');
+            const isUser = role === 'user';
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            const time = timestamp
+                ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            let actionsHtml = '';
+            
+            if (isUser && messageId) {
+                messageDiv.dataset.messageId = String(messageId);
+                if (sentimentSnapshot != null && (sentimentSnapshot.sentiment != null || sentimentSnapshot.emotion != null || sentimentSnapshot.score != null)) {
+                    messageDiv.dataset.sentimentSnapshot = encodeURIComponent(JSON.stringify({
+                        sentiment: sentimentSnapshot.sentiment,
+                        score: sentimentSnapshot.score,
+                        emotion: sentimentSnapshot.emotion
+                    }));
+                }
+                actionsHtml = `
+                    <div class="message-actions">
+                        <button type="button" class="sentiment-btn" onclick="toggleInlineSentiment(this)" aria-expanded="false" aria-label="View sentiment for this message">
+                            <i class="fas fa-chart-line"></i> Sentiment · tap to view
+                        </button>
+                    </div>
+                `;
+            }
+            // For Sage replies - Add XAI button
+            else if (!isUser && explanation) {
+                const escapedExplanation = explanation.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                actionsHtml = `
+                    <div class="message-actions">
+                        <button class="xai-btn" onclick="showExplanation(this, '${escapedExplanation}')">
+                            <i class="fas fa-info-circle"></i> Why Sage said this
+                        </button>
+                    </div>
+                `;
+            }
+
+            /* User: bubble → time → sentiment row (hidden detail until tap). Sage: bubble → actions → time */
+            if (isUser) {
+                messageDiv.innerHTML = `
+                    <div class="message-bubble">${escapeHtml(text).replace(/\n/g, '<br>')}</div>
+                    <div class="message-time">${time}</div>
+                    ${actionsHtml}
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-bubble">${escapeHtml(text).replace(/\n/g, '<br>')}</div>
+                    ${actionsHtml}
+                    <div class="message-time">${time}</div>
+                `;
+            }
+            
+            messagesArea.appendChild(messageDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        function showExplanation(btn, explanation) {
+            const existingBox = btn.closest('.message').querySelector('.explanation-box');
+            if (existingBox) {
+                existingBox.remove();
+                return;
+            }
+            
+            const explanationBox = document.createElement('div');
+            explanationBox.className = 'explanation-box';
+            explanationBox.innerHTML = `<i class="fas fa-robot"></i> ${escapeHtml(explanation)}`;
+            btn.closest('.message').appendChild(explanationBox);
+        }
+
+        function sentimentEmojiFor(emotion) {
+            const emotionEmojis = {
+                joy: '😊', gratitude: '🙏', sadness: '😔', anxiety: '🌬️', stress: '😰',
+                anger: '⚡', loneliness: '💔', calm: '🧘', hope: '🌈',
+                nostalgia: '🕰️', neutral: '😐'
+            };
+            return emotionEmojis[emotion] || '📊';
+        }
+
+        async function toggleInlineSentiment(btn) {
+            const msgEl = btn.closest('.message');
+            const actionsEl = btn.closest('.message-actions');
+            const existing = msgEl.querySelector('.sentiment-inline-box');
+            if (existing) {
+                existing.remove();
+                btn.innerHTML = '<i class="fas fa-chart-line"></i> Sentiment · tap to view';
+                btn.setAttribute('aria-expanded', 'false');
+                return;
+            }
+            btn.innerHTML = '<i class="fas fa-chart-line"></i> Hide sentiment';
+            btn.setAttribute('aria-expanded', 'true');
+
+            let data = null;
+            const snapRaw = msgEl.dataset.sentimentSnapshot;
+            if (snapRaw) {
+                try {
+                    data = JSON.parse(decodeURIComponent(snapRaw));
+                } catch (e) { /* ignore */ }
+            }
+            const mid = msgEl.dataset.messageId;
+            const bubbleText = (msgEl.querySelector('.message-bubble') && msgEl.querySelector('.message-bubble').textContent) || '';
+
+            if (!data && mid) {
+                try {
+                    const response = await fetch(`${API_URL}/chat/sentiment/${mid}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    const parsed = JSON.parse(await response.text());
+                    if (parsed.success && parsed.data) data = parsed.data;
+                } catch (e) { /* fall through */ }
+            }
+
+            if (!data || (data.sentiment == null && data.emotion == null && (data.score === undefined || data.score === null))) {
+                data = analyzeLocalSentiment(bubbleText);
+            }
+
+            const emoji = sentimentEmojiFor(data.emotion);
+            const sentimentColor = data.sentiment === 'positive' ? '#2D6A4F'
+                : (data.sentiment === 'negative' ? '#DC2626' : '#6b7280');
+            const emotionLabel = data.emotion ? data.emotion.charAt(0).toUpperCase() + data.emotion.slice(1) : 'Neutral';
+            const scoreLabel = data.score !== undefined && data.score !== null ? String(data.score) : '—';
+            const explain = data.explanation
+                ? data.explanation
+                : `Polarity ${scoreLabel}: overall tone reads as ${data.sentiment}, with ${data.emotion || 'neutral'} colouring.`;
+
+            const box = document.createElement('div');
+            box.className = 'sentiment-inline-box';
+            box.innerHTML = `
+                <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;flex-wrap:wrap;">
+                    <span style="font-size:1.15rem">${emoji}</span>
+                    <strong style="color:${sentimentColor};text-transform:capitalize">${escapeHtml(emotionLabel)}</strong>
+                    <span style="font-size:0.68rem;color:#6b7c6b;">${escapeHtml(data.sentiment)} · score ${escapeHtml(scoreLabel)}</span>
+                </div>
+                <p style="margin:0;font-size:0.72rem;line-height:1.45;color:#4A5B4A">${escapeHtml(explain)}</p>
+            `;
+            actionsEl.after(box);
+        }
+
+        function upgradePendingUserMessage(userMessageId, sentimentSnapshot) {
+            const area = document.getElementById('messagesArea');
+            const pending = [...area.querySelectorAll('.message.user-message')].reverse().find(el => !el.dataset.messageId);
+            if (!pending) return;
+            pending.dataset.messageId = String(userMessageId);
+            if (sentimentSnapshot && (sentimentSnapshot.sentiment != null || sentimentSnapshot.emotion != null || sentimentSnapshot.score != null)) {
+                pending.dataset.sentimentSnapshot = encodeURIComponent(JSON.stringify({
+                    sentiment: sentimentSnapshot.sentiment,
+                    score: sentimentSnapshot.score,
+                    emotion: sentimentSnapshot.emotion
+                }));
+            }
+            const timeEl = pending.querySelector('.message-time');
+            const actions = document.createElement('div');
+            actions.className = 'message-actions';
+            actions.innerHTML = `
+                <button type="button" class="sentiment-btn" onclick="toggleInlineSentiment(this)" aria-expanded="false" aria-label="View sentiment for this message">
+                    <i class="fas fa-chart-line"></i> Sentiment · tap to view
+                </button>`;
+            timeEl.after(actions);
+        }
+
+        function analyzeLocalSentiment(text) {
+            const positiveWords = ['happy', 'joy', 'grateful', 'good', 'great', 'excited', 'wonderful', 'amazing', 'love', 'peaceful', 'calm'];
+            const negativeWords = ['sad', 'anxious', 'scared', 'fear', 'angry', 'lonely', 'depressed', 'hopeless', 'stressed', 'overwhelmed', 'hurt', 'heavy'];
+            
+            const lowerText = text.toLowerCase();
+            let score = 0;
+            
+            positiveWords.forEach(word => {
+                if (lowerText.includes(word)) score += 0.15;
+            });
+            negativeWords.forEach(word => {
+                if (lowerText.includes(word)) score -= 0.15;
+            });
+            
+            score = Math.min(0.9, Math.max(-0.9, score));
+            
+            let sentiment = score > 0.2 ? 'positive' : (score < -0.2 ? 'negative' : 'neutral');
+            let emotion = 'neutral';
+            
+            if (lowerText.includes('nostalgic') || lowerText.includes('nostalgia')) {
+                emotion = 'nostalgia';
+            } else if (lowerText.includes('hope') || lowerText.includes('hopeful')) {
+                emotion = 'hope';
+                sentiment = 'positive';
+            } else if (lowerText.includes('grateful') || lowerText.includes('thankful')) {
+                emotion = 'gratitude';
+                sentiment = 'positive';
+            } else if (lowerText.includes('calm') || lowerText.includes('peaceful')) {
+                emotion = 'calm';
+                sentiment = 'positive';
+            } else if (lowerText.includes('lonely') || lowerText.includes('alone')) {
+                emotion = 'loneliness';
+                sentiment = 'negative';
+            } else if (lowerText.includes('angry') || lowerText.includes('frustrated')) {
+                emotion = 'anger';
+                sentiment = 'negative';
+            } else if (lowerText.includes('anxious') || lowerText.includes('anxiety')) {
+                emotion = 'anxiety';
+                sentiment = 'negative';
+            } else if (lowerText.includes('sad') || lowerText.includes('depressed')) {
+                emotion = 'sadness';
+                sentiment = 'negative';
+            } else if (lowerText.includes('heavy')) {
+                emotion = 'sadness';
+                sentiment = 'negative';
+                score = -0.4;
+            } else if (score > 0.3) {
+                emotion = 'joy';
+            }
+            
+            return {
+                sentiment: sentiment,
+                score: score,
+                emotion: emotion,
+                explanation: `Detected ${sentiment} sentiment (score: ${score}). Emotion: ${emotion}.`
+            };
+        }
+
+        // ==================== MESSAGE SENDING ====================
+
+        function showTypingIndicator() {
+            const messagesArea = document.getElementById('messagesArea');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typingIndicator';
+            typingDiv.className = 'message bot-message';
+            typingDiv.innerHTML = `
+                <div class="typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            `;
+            messagesArea.appendChild(typingDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingDiv = document.getElementById('typingIndicator');
+            if (typingDiv) typingDiv.remove();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addMessage(message, 'user');
+            input.value = '';
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch(`${API_URL}/chat/send`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+                
+                const raw = await response.text();
+                hideTypingIndicator();
+                let data = null;
+                try {
+                    data = raw ? JSON.parse(raw) : null;
+                } catch (parseErr) {
+                    console.error('Chat API returned non-JSON (often a 500 HTML page):', parseErr);
+                    addMessage("The server failed on this request (often a database mismatch). Restart the backend after pulling updates, or check the Flask terminal for errors.", 'bot');
+                    return;
+                }
+                
+                if (response.ok && data && data.success && data.data) {
+                    if (data.data.user_message_id != null && data.data.sentiment) {
+                        upgradePendingUserMessage(data.data.user_message_id, data.data.sentiment);
+                    }
+                    addMessage(data.data.response, 'bot', data.data.explanation);
+                } else {
+                    const errMsg = (data && (data.error || data.msg || data.message)) || `HTTP ${response.status}`;
+                    addMessage(`Could not get a reply: ${errMsg}`, 'bot');
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                console.error('Chat send failed:', error);
+                const demoResponse = generateDemoResponse(message);
+                addMessage(demoResponse.text, 'bot', demoResponse.explanation);
+            }
+        }
+
+        function generateDemoResponse(message) {
+            const lower = message.toLowerCase();
+            
+            if (lower.includes('exam') || lower.includes('study')) {
+                return {
+                    text: "📚 That sounds really heavy, and it makes sense that exam pressure is getting to you. For this moment, try making things smaller: pick just one subject and one 20-minute study block, then take a 5-minute break.",
+                    explanation: "Exam stress → CBT-based cognitive reframing"
+                };
+            } else if (lower.includes('anxious') || lower.includes('anxiety') || lower.includes('worry') || lower.includes('overwhelmed') || lower.includes('scared') || lower.includes('fear')) {
+                return {
+                    text: "🌬️ Anxiety can feel overwhelming. Try the 5-4-3-2-1 grounding technique: Name 5 things you see, 4 you touch, 3 you hear, 2 you smell, 1 you taste.",
+                    explanation: "Anxiety → Grounding technique"
+                };
+            } else if (lower.includes('sad') || lower.includes('depressed')) {
+                return {
+                    text: "💙 I hear that you're feeling down. Would you like to try writing down one thing you're grateful for today? Small actions can slowly lift our mood.",
+                    explanation: "Sadness → Behavioral Activation"
+                };
+            } else if (lower.includes('heavy')) {
+                return {
+                    text: "💙 Feeling heavy inside can be a sign of emotional weight you're carrying. Would you like to talk more about what's making you feel this way? Sometimes just sharing helps lighten the load.",
+                    explanation: "Heaviness detected → Offering support and validation"
+                };
+            } else if (lower.includes('suicide') || lower.includes('kill myself')) {
+                return {
+                    text: "🚨 CRISIS SUPPORT 🚨\n\nPlease reach out:\n📞 iCall: +91-9152987821\n📞 AASRA: +91-9820466726\n\nYou matter. 💚",
+                    explanation: "CRISIS DETECTED - Helpline redirect"
+                };
+            }
+            
+            return {
+                text: "✨ Thank you for sharing. I'm here to support you. Would you like to try a mindfulness exercise or just talk?",
+                explanation: "General wellness response"
+            };
+        }
+
+        function sendSuggestedMessage(message) {
+            document.getElementById('messageInput').value = message;
+            sendMessage();
+        }
+
+        async function clearChatHistory() {
+            if (confirm('🗑️ Are you sure you want to delete ALL your chat history? This cannot be undone.')) {
+                try {
+                    const response = await fetch(`${API_URL}/chat/history`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        await loadChatHistory();
+                        alert('✅ Chat history cleared successfully!');
+                    } else {
+                        alert('❌ Failed to clear chat history');
+                    }
+                } catch (error) {
+                    console.error('Error clearing history:', error);
+                    alert('❌ Error clearing chat history');
+                }
+            }
+        }
+
+        async function loadChatHistory() {
+            const messagesArea = document.getElementById('messagesArea');
+            try {
+                const response = await fetch(`${API_URL}/chat/history?limit=50`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) return;
+                const data = await response.json();
+                if (!data.success || !data.data) return;
+
+                const heading = data.data.day_heading || '';
+                const msgs = data.data.messages || [];
+
+                messagesArea.innerHTML = '';
+
+                if (heading) {
+                    const banner = document.createElement('div');
+                    banner.className = 'chat-day-banner';
+                    banner.textContent = `Today's conversation · ${heading}`;
+                    messagesArea.appendChild(banner);
+                }
+
+                if (msgs.length === 0) {
+                    addMessage(
+                        "🌿 Hello! I'm Sage, your mental wellness companion. I'm here to listen without judgment. How are you feeling today?",
+                        'bot',
+                        null,
+                        null,
+                        null
+                    );
+                    return;
+                }
+
+                msgs.forEach(msg => {
+                    if (msg.role === 'user') {
+                        addMessage(msg.message, 'user', null, msg.timestamp, msg.id, {
+                            sentiment: msg.sentiment,
+                            score: msg.sentiment_score,
+                            emotion: msg.sentiment_emotion
+                        });
+                    } else {
+                        addMessage(msg.message, 'bot', msg.explanation, msg.timestamp, msg.id);
+                    }
+                });
+            } catch (error) {
+                console.log('Using demo mode');
+            }
+        }
+
+        loadChatHistory();
+    </script>
+</body>
+</html>

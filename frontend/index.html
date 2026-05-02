@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sage | AI Mental Health Companion for India</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F5F7F2;
+            color: #2D3E2D;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* Landing Page Styles */
+        .landing-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #2D6A4F, #40916C);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: #2D6A4F;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2D3E2D;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #2D6A4F;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 2px solid #2D6A4F;
+            padding: 0.5rem 1.5rem;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #2D6A4F;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #2D6A4F;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            padding: 2rem 0 4rem;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: #1B3A2B;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #4A5B4A;
+            margin-bottom: 2rem;
+        }
+
+        .btn-start {
+            background: #2D6A4F;
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-start:hover {
+            background: #1B4D3E;
+            transform: translateY(-2px);
+        }
+
+        .login-link {
+            margin-top: 1rem;
+            color: #5A6E5A;
+        }
+
+        .login-link a {
+            color: #2D6A4F;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .disclaimer {
+            font-size: 0.8rem;
+            color: #8A9A8A;
+            margin-top: 1.5rem;
+            border-left: 3px solid #2D6A4F;
+            padding-left: 1rem;
+        }
+
+        .hero-image {
+            background: linear-gradient(135deg, #E8F3E6, #D4E8D0);
+            border-radius: 2rem;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .hero-image i {
+            font-size: 6rem;
+            color: #2D6A4F;
+            margin: 0.5rem;
+        }
+
+        /* Features Grid */
+        .features {
+            padding: 4rem 0;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: #1B3A2B;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #2D6A4F;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.75rem;
+            color: #1B3A2B;
+        }
+
+        .feature-card p {
+            color: #6B7E6B;
+            font-size: 0.9rem;
+        }
+
+        .powered-by {
+            text-align: center;
+            padding: 3rem 0;
+            color: #8A9A8A;
+            font-size: 0.9rem;
+        }
+
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8A9A8A;
+        }
+
+        .modal h2 {
+            color: #1B3A2B;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #D4E0D0;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal button {
+            width: 100%;
+            padding: 1rem;
+            background: #2D6A4F;
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .google-btn {
+            background: white !important;
+            color: #2D3E2D !important;
+            border: 1px solid #D4E0D0 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .google-btn i {
+            font-size: 1.2rem;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1rem 0;
+            color: #8A9A8A;
+            font-size: 0.8rem;
+        }
+
+        .switch-mode {
+            text-align: center;
+            margin-top: 1rem;
+            color: #6B7E6B;
+        }
+
+        .switch-mode a {
+            color: #2D6A4F;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .dev-badge {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.7rem;
+            color: #B0C4A0;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .navbar {
+                flex-direction: column;
+            }
+            .disclaimer {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="landing-container">
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-leaf"></i> Sage
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it works</a>
+                <button class="btn-login" onclick="openLoginModal()">Log in</button>
+            </div>
+        </nav>
+
+        <div class="hero">
+            <div>
+                <h1>A calm space to talk, feel, and grow.</h1>
+                <p>Sage is your CBT-trained AI companion. Vent, reflect, track your mood, journal your thoughts — at your pace, in private. Built with care for the realities of life in India.</p>
+                <button class="btn-start" onclick="openLoginModal()">Start for free <i class="fas fa-arrow-right"></i></button>
+                <div class="login-link"><a onclick="openLoginModal()">I already have an account</a> →</div>
+                <div class="disclaimer">Sage is a wellness companion, not a substitute for licensed therapy or medical care. In a crisis, please contact <strong>an Indian helpline</strong>.</div>
+            </div>
+            <div class="hero-image">
+                <i class="fas fa-leaf"></i>
+                <i class="fas fa-comment-dots"></i>
+                <i class="fas fa-smile"></i>
+            </div>
+        </div>
+
+        <div class="features" id="features">
+            <h2>Gentle support, built with care</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-comments"></i></div>
+                    <h3>Empathetic AI chat</h3>
+                    <p>Vent freely. Sage validates your feelings and gently offers CBT tools.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Daily mood check-ins</h3>
+                    <p>Tap an emoji. See your mood trend over weeks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-book"></i></div>
+                    <h3>Private journaling</h3>
+                    <p>Get thoughts out of your head and onto the page.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Safe & explainable</h3>
+                    <p>Crisis-aware. Every reply shows you why Sage said it.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="powered-by">Powered by gentle, science-backed CBT</div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h2 id="modalTitle">Sign in to Sage</h2>
+            <button id="googleBtn" class="google-btn" onclick="handleGoogleLogin()">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            <div id="googleInfo" class="dev-badge"></div>
+            <div class="divider">or</div>
+            <input type="text" id="loginUsername" placeholder="Username or Email">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button id="submitBtn" onclick="handleAuth()">Continue</button>
+            <div class="switch-mode">
+                <span id="switchText">Don't have an account?</span>
+                <a id="switchLink" onclick="toggleAuthMode()">Sign up</a>
+            </div>
+            <div class="dev-badge">Development mode</div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_URL = 'http://localhost:5000/api';
+        let isLoginMode = true;
+        let authToken = localStorage.getItem('token');
+
+        // Modal functions
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            if (isLoginMode) {
+                document.getElementById('modalTitle').innerText = 'Sign in to Sage';
+                document.getElementById('submitBtn').innerText = 'Continue';
+                document.getElementById('switchText').innerText = "Don't have an account?";
+                document.getElementById('switchLink').innerText = 'Sign up';
+            } else {
+                document.getElementById('modalTitle').innerText = 'Create account';
+                document.getElementById('submitBtn').innerText = 'Sign up';
+                document.getElementById('switchText').innerText = 'Already have an account?';
+                document.getElementById('switchLink').innerText = 'Sign in';
+            }
+        }
+
+        async function handleAuth() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const endpoint = isLoginMode ? `${API_URL}/auth/login` : `${API_URL}/auth/register`;
+
+            if (!username || !password) {
+                alert('Please enter username and password');
+                return;
+            }
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert(data.error || 'Authentication failed');
+                }
+            } catch (error) {
+                // Demo mode fallback
+                if (username === 'testuser' && password === 'pass123') {
+                    localStorage.setItem('token', 'demo-token');
+                    localStorage.setItem('user', JSON.stringify({ username: 'testuser', streak: 3 }));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('Invalid credentials. Use testuser / pass123 for demo');
+                }
+            }
+        }
+
+        function handleGoogleLogin() {
+            window.location.href = 'http://localhost:5000/api/auth/google';
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+        if (error === 'google_auth_failed') {
+            document.getElementById('googleInfo').innerText = 'Google sign-in failed. Please try again.';
+            openLoginModal();
+        } else if (error === 'google_oauth_not_configured') {
+            document.getElementById('googleInfo').innerText = 'Google OAuth is not configured on the server yet.';
+            openLoginModal();
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target === modal) closeLoginModal();
+        }
+
+        // Auto redirect if already logged in
+        if (authToken && window.location.pathname.includes('index.html')) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

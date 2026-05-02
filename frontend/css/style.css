@@ -1,0 +1,492 @@
+/*
+ * style.css - Global CSS Styles for Sage Mental Health Companion
+ * Sage Green Theme | India-focused Mental Wellness Platform
+ * 
+ * Color Palette:
+ * - Primary Green: #2D6A4F (sage green)
+ * - Light Green: #40916C
+ * - Background: #F5F7F2 (soft off-white)
+ * - Text Dark: #1B3A2B (deep forest)
+ * - Text Light: #4A5B4A (muted green-gray)
+ * - Accent: #E67E22 (warm orange for warnings)
+ * - Error: #DC2626 (red for critical)
+ */
+
+/* ==================== RESET & BASE ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #F5F7F2;
+    color: #2D3E2D;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* ==================== TYPOGRAPHY ==================== */
+h1, h2, h3, h4, h5, h6 {
+    color: #1B3A2B;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; margin-bottom: 1rem; }
+h3 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+h4 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+
+p {
+    color: #4A5B4A;
+    margin-bottom: 1rem;
+}
+
+a {
+    color: #2D6A4F;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #1B4D3E;
+}
+
+/* ==================== NAVIGATION ==================== */
+.navbar {
+    background: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid #E2E8E0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #2D6A4F, #40916C);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo i {
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    color: #2D6A4F;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #4A5B4A;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: all 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #2D6A4F;
+    border-bottom: 2px solid #2D6A4F;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn-primary {
+    background: #2D6A4F;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary:hover {
+    background: #1B4D3E;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid #2D6A4F;
+    padding: 0.7rem 1.4rem;
+    border-radius: 100px;
+    font-weight: 600;
+    color: #2D6A4F;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #2D6A4F;
+    color: white;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid #D4E0D0;
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    cursor: pointer;
+    color: #4A5B4A;
+    transition: all 0.2s;
+}
+
+.btn-outline:hover {
+    background: #F5F7F2;
+    border-color: #2D6A4F;
+}
+
+.btn-danger {
+    background: #DC2626;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background: #B91C1C;
+}
+
+/* ==================== CARDS ==================== */
+.card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid #E2E8E0;
+    transition: all 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* ==================== FORMS ==================== */
+input, textarea, select {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid #D4E0D0;
+    border-radius: 1rem;
+    background: white;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #2D6A4F;
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2D3E2D;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+/* ==================== MODAL ==================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* ==================== MOOD BUTTONS ==================== */
+.mood-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.mood-btn {
+    background: #F5F7F2;
+    border: 1px solid #D4E0D0;
+    border-radius: 60px;
+    padding: 0.7rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.mood-btn:hover {
+    background: #2D6A4F;
+    color: white;
+    border-color: #2D6A4F;
+}
+
+/* ==================== BADGES ==================== */
+.badge {
+    background: linear-gradient(135deg, #2D6A4F, #40916C);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.badge-outline {
+    background: transparent;
+    border: 1px solid #2D6A4F;
+    color: #2D6A4F;
+}
+
+/* ==================== ALERTS & MESSAGES ==================== */
+.alert {
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background: #E8F3E6;
+    color: #2D6A4F;
+    border-left: 3px solid #2D6A4F;
+}
+
+.alert-warning {
+    background: #FFF5E6;
+    color: #E67E22;
+    border-left: 3px solid #E67E22;
+}
+
+.alert-error {
+    background: #FEE2E2;
+    color: #DC2626;
+    border-left: 3px solid #DC2626;
+}
+
+/* ==================== HELPLINES ==================== */
+.helpline-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid #E2E8E0;
+    transition: all 0.2s;
+}
+
+.helpline-card:hover {
+    transform: translateX(4px);
+    border-left: 3px solid #2D6A4F;
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }
+
+.flex { display: flex; }
+.flex-column { flex-direction: column; }
+.justify-between { justify-content: space-between; }
+.align-center { align-items: center; }
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
+
+.w-100 { width: 100%; }
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.2rem; }
+    
+    .navbar {
+        padding: 0.8rem 1rem;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .mood-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 1.5rem;
+    }
+    
+    .btn-primary {
+        padding: 0.6rem 1.2rem;
+    }
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 0.5s ease-in-out;
+}
+
+/* ==================== SCROLLBAR ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #E2E8E0;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2D6A4F;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1B4D3E;
+}
+/* Sentiment Button Styles */
+.sentiment-btn {
+    background: transparent;
+    border: 1px solid #2D6A4F;
+    color: #2D6A4F;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.sentiment-btn:hover {
+    background: #2D6A4F;
+    color: white;
+}
+
+/* Sentiment Badge (optional - for inline display) */
+.sentiment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    margin-left: 8px;
+}
+
+.sentiment-positive {
+    background: #D4E8D0;
+    color: #2D6A4F;
+}
+
+.sentiment-negative {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.sentiment-neutral {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
+/* Chat: calendar-day banner (today's thread) */
+.chat-day-banner {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #5c6d5c;
+    padding: 0.4rem 0.85rem;
+    margin-bottom: 0.85rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+    border: 1px solid #e2e8e0;
+}

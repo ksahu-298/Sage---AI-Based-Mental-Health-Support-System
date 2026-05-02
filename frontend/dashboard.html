@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dashboard | Sage Mental Health Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F5F7F2;
+            color: #2D3E2D;
+        }
+
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid #E2E8E0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2D6A4F, #40916C);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4A5B4A;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #2D6A4F;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #2D6A4F;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid #D4E0D0;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            color: #4A5B4A;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #FEE2E2;
+            border-color: #DC2626;
+            color: #DC2626;
+        }
+
+        .delete-mood-btn {
+            background: transparent;
+            border: 1px solid #DC2626;
+            color: #DC2626;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .delete-mood-btn:hover {
+            background: #DC2626;
+            color: white;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+
+        .greeting {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1B3A2B;
+        }
+
+        .greeting span {
+            color: #2D6A4F;
+        }
+
+        .question {
+            color: #6B7E6B;
+            margin-top: 0.5rem;
+        }
+
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #E2E8E0;
+            text-decoration: none;
+            display: block;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            border-color: #2D6A4F;
+        }
+
+        .action-icon {
+            font-size: 2.5rem;
+            color: #2D6A4F;
+            margin-bottom: 1rem;
+        }
+
+        .action-card h3 {
+            color: #1B3A2B;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-card p {
+            color: #8A9A8A;
+            font-size: 0.85rem;
+        }
+
+        .mood-checkin {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #E2E8E0;
+        }
+
+        .mood-checkin h3 {
+            margin-bottom: 1rem;
+            color: #1B3A2B;
+        }
+
+        .mood-buttons {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .mood-btn {
+            background: #F5F7F2;
+            border: 1px solid #D4E0D0;
+            border-radius: 60px;
+            padding: 0.7rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .mood-btn:hover {
+            background: #2D6A4F;
+            color: white;
+            border-color: #2D6A4F;
+        }
+
+        .streak-warning {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #FFF5E6;
+            border-radius: 1rem;
+            color: #E67E22;
+            font-size: 0.85rem;
+        }
+
+        .badges-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #E2E8E0;
+        }
+
+        .badges-card h3 {
+            margin-bottom: 1rem;
+            color: #1B3A2B;
+        }
+
+        .badges-card h4 {
+            margin: 1rem 0 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .badges-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-item {
+            background: #F5F7F2;
+            border-radius: 40px;
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .badge-earned {
+            background: linear-gradient(135deg, #2D6A4F, #40916C);
+            color: white;
+        }
+
+        .badge-next {
+            border: 2px solid #2D6A4F;
+            background: white;
+        }
+
+        .badge-locked {
+            opacity: 0.5;
+            background: #F5F7F2;
+        }
+
+        .progress-bar-container {
+            background: #E2E8E0;
+            border-radius: 20px;
+            height: 6px;
+            width: 60px;
+            overflow: hidden;
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+
+        .progress-bar {
+            background: #2D6A4F;
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.3s;
+        }
+
+        .streak-info {
+            background: linear-gradient(135deg, #2D6A4F, #40916C);
+            border-radius: 1rem;
+            padding: 1rem;
+            color: white;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .streak-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .graph-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #E2E8E0;
+        }
+
+        .graph-card h3 {
+            margin-bottom: 1rem;
+            color: #1B3A2B;
+        }
+
+        .graph-container {
+            position: relative;
+            height: 250px;
+        }
+
+        .mood-avg {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #6B7E6B;
+        }
+
+        .recent-journals {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #E2E8E0;
+        }
+
+        .recent-journals h3 {
+            margin-bottom: 1rem;
+            color: #1B3A2B;
+        }
+
+        .journal-entry {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #E2E8E0;
+        }
+
+        .journal-entry:last-child {
+            border-bottom: none;
+        }
+
+        .journal-title {
+            font-weight: 600;
+            color: #1B3A2B;
+        }
+
+        .journal-date {
+            font-size: 0.7rem;
+            color: #8A9A8A;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #8A9A8A;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-container {
+                padding: 1rem;
+            }
+            .greeting {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-leaf"></i> Sage
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="chat.html">Chat</a>
+            <a href="journal.html">Journal</a>
+            <a href="helplines.html">Helplines</a>
+        </div>
+        <div class="user-menu">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="welcome-section">
+            <div class="greeting">Good <span id="timeOfDay">afternoon</span>, <span id="username">friend</span>.</div>
+            <div class="question">How are you feeling right now? Even a small check-in is a kind thing you can do for yourself today.</div>
+        </div>
+
+        <div class="action-cards">
+            <a href="chat.html" class="action-card">
+                <div class="action-icon"><i class="fas fa-comment-dots"></i></div>
+                <h3>Talk to Sage</h3>
+                <p>Have a conversation with your AI companion</p>
+            </a>
+            <div class="action-card" onclick="scrollToMood()">
+                <div class="action-icon"><i class="fas fa-smile"></i></div>
+                <h3>Log today's mood</h3>
+                <p>Quick check-in to track your emotional state</p>
+            </div>
+        </div>
+
+        <!-- Mood Check-in Section -->
+        <div class="mood-checkin" id="moodSection">
+            <h3><i class="fas fa-chart-line"></i> How are you feeling?</h3>
+            <div class="mood-buttons" id="moodButtons">
+                <button class="mood-btn" data-score="1">😔 1 - Very Low</button>
+                <button class="mood-btn" data-score="2">😔 2</button>
+                <button class="mood-btn" data-score="3">😐 3 - Low</button>
+                <button class="mood-btn" data-score="4">😐 4</button>
+                <button class="mood-btn" data-score="5">🙂 5 - Okay</button>
+                <button class="mood-btn" data-score="6">🙂 6</button>
+                <button class="mood-btn" data-score="7">😊 7 - Good</button>
+                <button class="mood-btn" data-score="8">😊 8</button>
+                <button class="mood-btn" data-score="9">😍 9 - Amazing</button>
+                <button class="mood-btn" data-score="10">😍 10</button>
+            </div>
+            <div id="streakWarning" class="streak-warning" style="display: none;"></div>
+            <div id="moodFeedback" style="margin-top: 0.75rem; font-size: 0.85rem; color: #2D6A4F;"></div>
+        </div>
+
+        <!-- Delete Mood Button Section -->
+        <div class="mood-delete-section" style="margin-top: 0rem; margin-bottom: 1.5rem; text-align: center;">
+            <button id="deleteMoodBtn" class="delete-mood-btn">
+                <i class="fas fa-trash-alt"></i> Delete Today's Mood
+            </button>
+            <p style="font-size: 0.7rem; color: #8A9A8A; margin-top: 0.5rem;">Only available if you logged mood today</p>
+        </div>
+
+        <div class="two-column">
+            <!-- Mood Graph -->
+            <div class="graph-card">
+                <h3><i class="fas fa-chart-line"></i> 7-DAY MOOD AVG</h3>
+                <div class="graph-container">
+                    <canvas id="moodChart"></canvas>
+                </div>
+                <div class="mood-avg" id="moodAvgText">No mood entries yet. Tap an emoji to start tracking.</div>
+            </div>
+
+            <!-- Badges & Streak Section -->
+            <div class="badges-card">
+                <h3><i class="fas fa-medal"></i> Your Badges Journey</h3>
+                
+                <h4><i class="fas fa-check-circle" style="color: #2D6A4F;"></i> Earned Badges</h4>
+                <div id="earnedBadges" class="badges-list">
+                    <div class="badge-item badge-locked">🔒 No badges yet. Log your first mood!</div>
+                </div>
+                
+                <h4 style="margin-top: 1rem;"><i class="fas fa-chart-line" style="color: #E67E22;"></i> Next Badges to Earn</h4>
+                <div id="nextBadges" class="badges-list">
+                    <div class="badge-item badge-locked">Log mood to see progress</div>
+                </div>
+                
+                <h4 style="margin-top: 1rem;"><i class="fas fa-lock" style="color: #8A9A8A;"></i> All Available Badges</h4>
+                <div id="allLockedBadges" class="badges-list">
+                    <div class="badge-item badge-locked">Loading badges...</div>
+                </div>
+                
+                <div class="streak-info">
+                    <div>Longest streak: <span id="longestStreak">0</span> days · Total check-ins: <span id="totalCheckins">0</span></div>
+                    <div class="streak-number" id="currentStreak">🔥 0</div>
+                    <div id="streakMessage">Start your streak by logging your mood today! 🌱</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-journals">
+            <h3><i class="fas fa-book"></i> Recent Journal Entries</h3>
+            <div id="recentJournalsList">
+                <div class="empty-state">
+                    <i class="fas fa-pen" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+                    No entries yet. Start journaling to see your reflections here.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let moodChart = null;
+        let currentUser = null;
+
+        const ALL_BADGES = [
+            { name: 'First Step', icon: '👣', requirement: 'Complete your first check-in', type: 'checkin', target: 1 },
+            { name: 'Resilience Star', icon: '⭐', requirement: '7 day streak', type: 'streak', target: 7 },
+            { name: 'Mindful Warrior', icon: '🧘', requirement: '14 day streak', type: 'streak', target: 14 },
+            { name: 'Wellness Champion', icon: '🏆', requirement: '30 day streak', type: 'streak', target: 30 },
+            { name: 'Journal Keeper', icon: '📔', requirement: '10 journal entries', type: 'journal', target: 10 },
+            { name: 'Dedicated Journaler', icon: '📚', requirement: '50 journal entries', type: 'journal', target: 50 },
+            { name: 'Emotion Explorer', icon: '🎭', requirement: '5 different moods', type: 'mood_variety', target: 5 },
+            { name: 'Chat Companion', icon: '💬', requirement: '50 messages', type: 'chat', target: 50 },
+            { name: 'Early Riser', icon: '🌅', requirement: '5 morning check-ins', type: 'morning', target: 5 },
+            { name: 'Night Owl', icon: '🦉', requirement: '5 evening check-ins', type: 'evening', target: 5 },
+            { name: 'Streak Saver', icon: '🔄', requirement: 'Recover a broken streak', type: 'streak_saver', target: 1 }
+        ];
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        try {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                currentUser = JSON.parse(userStr);
+                document.getElementById('username').innerText = currentUser.username || 'friend';
+                const avatarLetter = (currentUser.username || 'U').charAt(0).toUpperCase();
+                document.getElementById('userAvatar').innerText = avatarLetter;
+            }
+        } catch(e) {}
+
+        const hour = new Date().getHours();
+        let greeting = 'afternoon';
+        if (hour < 12) greeting = 'morning';
+        else if (hour < 18) greeting = 'afternoon';
+        else greeting = 'evening';
+        document.getElementById('timeOfDay').innerText = greeting;
+
+        function scrollToMood() {
+            document.getElementById('moodSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function getBadgeProgress(badge, userStats) {
+            switch(badge.type) {
+                case 'streak': return Math.min(100, Math.round((userStats.current_streak / badge.target) * 100));
+                case 'journal': return Math.min(100, Math.round((userStats.journal_count / badge.target) * 100));
+                case 'chat': return Math.min(100, Math.round((userStats.chat_count / badge.target) * 100));
+                default: return 0;
+            }
+        }
+
+        function displayAllBadges(earnedBadgeNames, userStats) {
+            const earnedContainer = document.getElementById('earnedBadges');
+            const nextContainer = document.getElementById('nextBadges');
+            const lockedContainer = document.getElementById('allLockedBadges');
+            
+            let earned = [];
+            let next = [];
+            let locked = [];
+            
+            ALL_BADGES.forEach(badge => {
+                const isEarned = earnedBadgeNames.includes(badge.name);
+                const progress = getBadgeProgress(badge, userStats);
+                
+                if (isEarned) {
+                    earned.push(badge);
+                } else if (progress > 0) {
+                    next.push({ ...badge, progress });
+                } else {
+                    locked.push(badge);
+                }
+            });
+            
+            earnedContainer.innerHTML = earned.length > 0 ? 
+                earned.map(b => `<div class="badge-item badge-earned"><i class="fas fa-check-circle"></i> ${b.icon} ${b.name}</div>`).join('') :
+                '<div class="badge-item badge-locked">🔒 No badges yet. Log your first mood!</div>';
+            
+            nextContainer.innerHTML = next.length > 0 ?
+                next.slice(0, 5).map(b => `
+                    <div class="badge-item badge-next">
+                        ${b.icon} ${b.name}
+                        <div class="progress-bar-container"><div class="progress-bar" style="width: ${b.progress}%"></div></div>
+                        <span style="font-size: 0.65rem;">${b.progress}%</span>
+                    </div>
+                `).join('') :
+                '<div class="badge-item badge-locked">✨ You\'ve earned all badges! ✨</div>';
+            
+            lockedContainer.innerHTML = locked.map(b => `
+                <div class="badge-item badge-locked">
+                    🔒 ${b.icon} ${b.name}
+                    <span style="font-size: 0.65rem; margin-left: 0.3rem;">${b.requirement}</span>
+                </div>
+            `).join('');
+        }
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_URL}/user/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.data) {
+                        updateUI(data.data);
+                        
+                        const stats = {
+                            current_streak: data.data.user?.streak || 0,
+                            journal_count: data.data.recent_journals?.length || 0,
+                            chat_count: 0
+                        };
+                        const earnedBadgeNames = data.data.badges?.map(b => b.name) || [];
+                        displayAllBadges(earnedBadgeNames, stats);
+                        return;
+                    }
+                }
+                
+                // Fallback to demo data
+                console.log('Using demo data');
+                loadDemoData();
+                displayAllBadges([], { current_streak: 0, journal_count: 0, chat_count: 0 });
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                loadDemoData();
+                displayAllBadges([], { current_streak: 0, journal_count: 0, chat_count: 0 });
+            }
+        }
+
+        function loadDemoData() {
+            const demoWeeklyData = [
+                { day: 'Mon', score: null, has_entry: false },
+                { day: 'Tue', score: null, has_entry: false },
+                { day: 'Wed', score: null, has_entry: false },
+                { day: 'Thu', score: null, has_entry: false },
+                { day: 'Fri', score: null, has_entry: false },
+                { day: 'Sat', score: null, has_entry: false },
+                { day: 'Sun', score: null, has_entry: false }
+            ];
+            updateMoodGraph(demoWeeklyData);
+            document.getElementById('moodAvgText').innerText = 'No mood entries yet. Tap an emoji to start tracking.';
+            document.getElementById('longestStreak').innerText = '0';
+            document.getElementById('totalCheckins').innerText = '0';
+            document.getElementById('currentStreak').innerHTML = '🔥 0';
+        }
+
+        function updateUI(data) {
+            console.log('Updating UI with data:', data);
+            
+            if (data.user) {
+                document.getElementById('longestStreak').innerText = data.user.longest_streak || 0;
+                document.getElementById('totalCheckins').innerText = data.user.total_checkins || 0;
+                document.getElementById('currentStreak').innerHTML = `🔥 ${data.user.streak || 0}`;
+            }
+
+            if (data.mood_logged_today) {
+                document.getElementById('streakMessage').innerHTML = `✅ You've logged your mood today! Current streak: ${data.user?.streak || 0} days.`;
+                document.getElementById('streakWarning').style.display = 'none';
+            } else if (data.streak_warning) {
+                document.getElementById('streakWarning').style.display = 'block';
+                document.getElementById('streakWarning').innerHTML = data.streak_warning;
+                document.getElementById('streakMessage').innerHTML = data.streak_warning;
+            } else {
+                document.getElementById('streakWarning').style.display = 'none';
+                document.getElementById('streakMessage').innerHTML = `Current streak: ${data.user?.streak || 0} days. Keep it up!`;
+            }
+
+            if (data.weekly_mood) {
+                updateMoodGraph(data.weekly_mood);
+                const scores = data.weekly_mood.filter(w => w.score !== null).map(w => w.score);
+                if (scores.length > 0) {
+                    const avg = scores.reduce((a,b) => a+b, 0) / scores.length;
+                    document.getElementById('moodAvgText').innerHTML = `7-day average: ${avg.toFixed(1)}/10`;
+                }
+            }
+
+            if (data.recent_journals && data.recent_journals.length > 0) {
+                const journalsHtml = data.recent_journals.map(j => `
+                    <div class="journal-entry">
+                        <div class="journal-title">${escapeHtml(j.title || 'Journal Entry')}</div>
+                        <div class="journal-date">${new Date(j.created_at).toLocaleDateString()}</div>
+                        <div style="font-size: 0.85rem; color: #6B7E6B;">${escapeHtml(j.preview || '')}</div>
+                    </div>
+                `).join('');
+                document.getElementById('recentJournalsList').innerHTML = journalsHtml;
+            }
+        }
+
+        function updateMoodGraph(weeklyData) {
+            const ctx = document.getElementById('moodChart').getContext('2d');
+            const labels = weeklyData.map(w => w.day);
+            const scores = weeklyData.map(w => w.score || null);
+            
+            if (moodChart) moodChart.destroy();
+            
+            moodChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Mood Score (1-10)',
+                        data: scores,
+                        borderColor: '#2D6A4F',
+                        backgroundColor: 'rgba(45, 106, 79, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: scores.map(s => s ? '#2D6A4F' : '#ccc'),
+                        pointBorderColor: '#fff',
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { min: 1, max: 10, title: { display: true, text: 'Mood Score' } } },
+                    plugins: { tooltip: { callbacks: { label: (ctx) => ctx.raw ? `Mood: ${ctx.raw}/10` : 'No data' } } }
+                }
+            });
+        }
+
+        async function recordMood(score) {
+            try {
+                const response = await fetch(`${API_URL}/mood/record`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ score })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('moodFeedback').innerHTML = `✅ ${data.data.message || `Mood recorded: ${score}/10`}`;
+                    setTimeout(() => document.getElementById('moodFeedback').innerHTML = '', 3000);
+                    loadDashboard();
+                } else {
+                    document.getElementById('moodFeedback').innerHTML = '❌ ' + (data.error || 'Could not save mood');
+                    setTimeout(() => document.getElementById('moodFeedback').innerHTML = '', 3000);
+                }
+            } catch (error) {
+                document.getElementById('moodFeedback').innerHTML = '❌ Error saving mood. Make sure backend is running.';
+                setTimeout(() => document.getElementById('moodFeedback').innerHTML = '', 3000);
+            }
+        }
+
+        async function deleteTodayMood() {
+            if (confirm('⚠️ Are you sure you want to delete today\'s mood entry?\n\nYour streak will be recalculated. This cannot be undone.')) {
+                try {
+                    const response = await fetch(`${API_URL}/mood/delete`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert('✅ Today\'s mood entry has been deleted!');
+                        loadDashboard();
+                    } else {
+                        alert('❌ ' + (data.error || 'Could not delete mood entry'));
+                    }
+                } catch (error) {
+                    alert('❌ Error deleting mood entry. Make sure backend is running.');
+                }
+            }
+        }
+
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', () => recordMood(parseInt(btn.dataset.score)));
+        });
+
+        const deleteBtn = document.getElementById('deleteMoodBtn');
+        if (deleteBtn) deleteBtn.addEventListener('click', deleteTodayMood);
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>
