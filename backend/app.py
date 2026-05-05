@@ -47,8 +47,7 @@ if database_url.startswith('postgresql://'):
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 
 db = SQLAlchemy(app)
-jwt = JWTManager(app)
-    
+jwt = JWTManager(app)   
 # ==================== GOOGLE OAUTH ====================
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
