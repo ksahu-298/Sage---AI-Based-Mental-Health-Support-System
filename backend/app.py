@@ -41,15 +41,14 @@ CORS(app, resources={r"/api/*": {"origins": [
 database_url = os.getenv('DATABASE_URL', 'sqlite:///sage.db')
 if database_url.startswith('postgres://'):
     database_url = database_url.replace('postgres://', 'postgresql://', 1)
+# Use pg8000 driver instead of psycopg2
+if database_url.startswith('postgresql://'):
+    database_url = database_url.replace('postgresql://', 'postgresql+pg8000://', 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'sage-secret-key-2024'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
-app.config['SECRET_KEY'] = 'sage-oauth-secret-key-2024'
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
-
+    
 # ==================== GOOGLE OAUTH ====================
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
