@@ -6,7 +6,7 @@
  * All functions return Promises with standardized response format
  */
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://sage-ai-based-mental-health-support-system-production.up.railway.app/api'; // Update with your backend URL
 
 /**
  * Get authentication token from localStorage
