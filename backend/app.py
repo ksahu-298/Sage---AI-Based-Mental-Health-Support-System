@@ -31,7 +31,11 @@ else:
 
 # ==================== Initialize App ====================
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3000"]}}, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": [
+    "http://localhost:3000",
+    "https://grand-tartufo-dc4f90.netlify.app",
+    os.getenv("FRONTEND_URL", "")
+]}}, supports_credentials=True) 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sage.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
