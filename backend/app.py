@@ -37,7 +37,11 @@ CORS(app, resources={r"/api/*": {"origins": [
     os.getenv("FRONTEND_URL", "")
 ]}}, supports_credentials=True) 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sage.db'
+# PostgreSQL with SQLite fallback for local dev
+database_url = os.getenv('DATABASE_URL', 'sqlite:///sage.db')
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'sage-secret-key-2024'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
