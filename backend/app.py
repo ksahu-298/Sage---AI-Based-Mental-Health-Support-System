@@ -46,8 +46,13 @@ if database_url.startswith('postgresql://'):
     database_url = database_url.replace('postgresql://', 'postgresql+pg8000://', 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'sage-oauth-secret-key-2024')
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'sage-secret-key-2024')
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=7)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
-jwt = JWTManager(app)   
+jwt = JWTManager(app)
 # ==================== GOOGLE OAUTH ====================
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
