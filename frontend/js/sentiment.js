@@ -3,7 +3,7 @@
  * Handles sentiment analysis display and API calls
  */
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://sage-ai-based-mental-health-support-system-production.up.railway.app/api';
 
 // Emotion to emoji mapping
 const EMOTION_EMOJIS = {

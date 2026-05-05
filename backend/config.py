@@ -29,7 +29,7 @@ class Config:
     JWT_HEADER_TYPE = 'Bearer'
     
     # CORS Settings
-    CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:3000,http://127.0.0.1:5500,http://localhost:5000').split(',')
+    CORS_ORIGINS = os.environ.get('CORS_ORIGINS', 'http://localhost:3000,http://127.0.0.1:5500,http://localhost:5000,https://grand-tartufo-dc4f90.netlify.app').split(',')
     
     # Rate Limiting - Fixed to handle string values properly
     RATE_LIMIT_CHAT = 20  # messages per minute
@@ -43,7 +43,7 @@ class Config:
     # Google OAuth (Optional)
     GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '')
     GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET', '')
-    GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI', 'http://localhost:5000/api/auth/google/callback')
+    GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI', 'https://sage-ai-based-mental-health-support-system-production.up.railway.app/api/auth/google/callback')
     
     # Email Settings (Optional)
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')

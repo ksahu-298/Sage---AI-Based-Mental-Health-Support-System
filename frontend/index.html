@@ -424,7 +424,7 @@
 
     <script>
         // API Configuration
-        const API_URL = 'http://localhost:5000/api';
+        const API_URL = 'https://sage-ai-based-mental-health-support-system-production.up.railway.app/api';
         let isLoginMode = true;
         let authToken = localStorage.getItem('token');
 
@@ -490,7 +490,7 @@
         }
 
         function handleGoogleLogin() {
-            window.location.href = 'http://localhost:5000/api/auth/google';
+            window.location.href = 'https://sage-ai-based-mental-health-support-system-production.up.railway.app/api/auth/google';
         }
 
         const params = new URLSearchParams(window.location.search);
