@@ -1,14 +1,14 @@
 <div align="center">
 
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26&pause=1000&color=2C5364&center=true&vCenter=true&width=600&lines=Sage+%F0%9F%A7%98;AI-Powered+Mental+Health+Companion;Mood+Tracking+%C2%B7+Journaling+%C2%B7+Secure+Auth" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26&pause=1000&color=6B8F71&center=true&vCenter=true&width=600&lines=Sage+%F0%9F%A7%98;AI-Powered+Mental+Health+Companion;Mood+Tracking+%C2%B7+Journaling+%C2%B7+Secure+Auth" alt="Typing SVG" />
 </a>
 
 <br/>
 
-<img src="https://img.shields.io/badge/status-active-2C5364?style=flat-square" />
-<img src="https://img.shields.io/badge/license-MIT-203A43?style=flat-square" />
-<img src="https://img.shields.io/badge/made%20with-%E2%9D%A4%EF%B8%8F%20%26%20Python-2C5364?style=flat-square" />
+<img src="https://img.shields.io/badge/status-active-87A96B?style=flat-square" />
+<img src="https://img.shields.io/badge/license-MIT-9CAF88?style=flat-square" />
+<img src="https://img.shields.io/badge/made%20with-%E2%9D%A4%EF%B8%8F%20%26%20Python-4A5D45?style=flat-square" />
 
 </div>
 
@@ -39,11 +39,11 @@ This isn't a toy chatbot wrapper. It's a full-stack application with real auth (
 
 <div align="center">
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
-![Google OAuth](https://img.shields.io/badge/Google_OAuth-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![Python](https://img.shields.io/badge/Python-4A5D45?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-6B8F71?style=for-the-badge&logo=flask&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-87A96B?style=for-the-badge&logo=sqlite&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-4A5D45?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Google OAuth](https://img.shields.io/badge/Google_OAuth-6B8F71?style=for-the-badge&logo=google&logoColor=white)
 
 </div>
 
