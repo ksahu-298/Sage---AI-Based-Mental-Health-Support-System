@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Sage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8f3e6,#d4e8d0);min-height:100vh;display:flex;align-items:center;justify-content:center}
+        .login-card{background:white;border-radius:2rem;padding:2rem;width:450px;max-width:90%;box-shadow:0 20px 40px rgba(0,0,0,0.1)}
+        .logo{text-align:center;margin-bottom:1.5rem}
+        .logo h1{color:#2D6A4F;font-size:2rem}
+        .google-btn{width:100%;padding:0.8rem;background:white;border:1px solid #D4E0D0;border-radius:1rem;font-size:1rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:1rem}
+        .google-btn:hover{background:#F5F7F2;border-color:#2D6A4F}
+        .divider{text-align:center;margin:1rem 0;color:#8A9A8A;position:relative}
+        .divider::before,.divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:#E2E8E0}
+        .divider::before{left:0}
+        .divider::after{right:0}
+        input{width:100%;padding:0.8rem;margin:0.5rem 0;border:1px solid #D4E0D0;border-radius:1rem;font-family:'Inter',sans-serif}
+        input:focus{outline:none;border-color:#2D6A4F}
+        .continue-btn{width:100%;padding:0.8rem;background:#2D6A4F;color:white;border:none;border-radius:1rem;font-size:1rem;font-weight:600;cursor:pointer;margin-top:1rem}
+        .continue-btn:hover{background:#1B4D3E}
+        .continue-btn:disabled{background:#8A9A8A;cursor:not-allowed}
+        .switch-mode{text-align:center;margin-top:1rem;color:#6B7E6B}
+        .switch-mode a{color:#2D6A4F;cursor:pointer;text-decoration:none;font-weight:600}
+        .error{color:#DC2626;font-size:0.8rem;margin-top:0.5rem;text-align:center;min-height:1.2rem}
+        .loading{text-align:center;color:#2D6A4F;font-size:0.85rem;margin-top:0.5rem;display:none}
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo">
+            <h1>🌿 Sage</h1>
+        </div>
+        
+        <button class="google-btn" id="googleLoginBtn">
+            <i class="fab fa-google"></i> Continue with Google
+        </button>
+        
+        <div class="divider">or</div>
+        
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button class="continue-btn" id="loginBtn">Sign in</button>
+
+        <div class="loading" id="loading">⏳ Signing in...</div>
+        
+        <div class="switch-mode">
+            <span id="switchText">Don't have an account?</span>
+            <a id="switchLink">Sign up</a>
+        </div>
+        
+        <div id="error" class="error"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://sage-ai-based-mental-health-support-system-production.up.railway.app/api';
+        let isLoginMode = true;
+
+        // Handle OAuth errors from URL params
+        const params = new URLSearchParams(window.location.search);
+        const urlError = params.get('error');
+        if (urlError === 'google_auth_failed') {
+            document.getElementById('error').innerText = 'Google sign-in failed. Please try again.';
+        } else if (urlError === 'google_oauth_not_configured') {
+            document.getElementById('error').innerText = 'Google OAuth is not configured on the server yet.';
+        }
+
+        // Google login
+     document.getElementById('googleLoginBtn').onclick = function() {
+    window.location.href = 'https://sage-ai-based-mental-health-support-system-production.up.railway.app/api/auth/google';
+};
+
+        // Main login/register handler
+        document.getElementById('loginBtn').onclick = async function() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('error');
+            const loadingDiv = document.getElementById('loading');
+            const btn = document.getElementById('loginBtn');
+
+            // Clear previous errors
+            errorDiv.innerText = '';
+
+            // Basic validation
+            if (!username || !password) {
+                errorDiv.innerText = 'Please enter username and password.';
+                return;
+            }
+
+            const endpoint = isLoginMode ? `${API_URL}/auth/login` : `${API_URL}/auth/register`;
+
+            // Show loading state
+            btn.disabled = true;
+            btn.innerText = isLoginMode ? 'Signing in...' : 'Signing up...';
+            loadingDiv.style.display = 'block';
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Save real token and user
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    errorDiv.innerText = data.error || 'Invalid credentials. Please try again.';
+                }
+            } catch (err) {
+                errorDiv.innerText = '⚠️ Cannot connect to server. Make sure the backend is running on port 5000.';
+                console.error('Login error:', err);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = isLoginMode ? 'Sign in' : 'Sign up';
+                loadingDiv.style.display = 'none';
+            }
+        };
+
+        // Allow Enter key to submit
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginBtn').click();
+            }
+        });
+
+        // Toggle login/signup mode
+        document.getElementById('switchLink').onclick = function() {
+            isLoginMode = !isLoginMode;
+            const btn = document.getElementById('loginBtn');
+            const switchText = document.getElementById('switchText');
+            document.getElementById('error').innerText = '';
+
+            if (isLoginMode) {
+                btn.innerText = 'Sign in';
+                switchText.innerText = "Don't have an account?";
+                document.getElementById('switchLink').innerText = 'Sign up';
+            } else {
+                btn.innerText = 'Sign up';
+                switchText.innerText = 'Already have an account?';
+                document.getElementById('switchLink').innerText = 'Sign in';
+            }
+        };
+    </script>
+</body>
+</html>

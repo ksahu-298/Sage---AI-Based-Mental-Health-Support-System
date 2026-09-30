@@ -1,0 +1,13 @@
+node_modules/
+venv/
+__pycache__/
+*.pyc
+.env
+backend/.env
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
+sage_app.db
