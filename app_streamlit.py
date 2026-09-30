@@ -300,13 +300,18 @@ def generate_sage_response(message, chat_history):
             
             history_messages = []
             for item in chat_history[-6:]:
-                history_messages.append({"role": item['role'], "content": item['message']})
+                # Chat rows use "sage" in the database, but Groq expects
+                # assistant messages to use the OpenAI-compatible role name.
+                role = "assistant" if item.get("role") == "sage" else item.get("role")
+                if role in {"user", "assistant"}:
+                    history_messages.append({"role": role, "content": item["message"]})
                 
-            system_prompt = """You are Sage, an empathetic, gentle mental wellness AI companion for India.
-- Keep responses supportive, warm, and concise (2-4 sentences).
-- Use reassuring tone and appropriate gentle emojis.
-- Validate emotions first, then offer a simple CBT exercise, grounding technique (5-4-3-2-1), or gentle question.
-- Never diagnose or claim to replace a doctor."""
+            system_prompt = """You are Sage, an empathetic mental-health and emotional-wellness companion for India.
+- Only assist with mental health, emotions, stress, coping skills, mood reflection, journaling, and crisis-support resources.
+- If asked about an unrelated topic (including general facts, companies, or programming), do not answer that request. Briefly explain that Sage focuses on mental wellness and invite the user to ask about something in that area.
+- For in-scope topics, be supportive and gentle. Validate feelings and offer a practical coping step when useful.
+- Keep replies concise (usually 2-4 sentences) and use emojis sparingly.
+- Never diagnose or claim to replace a doctor or therapist."""
 
             available_models = ["qwen/qwen3.8-27b", "openai/gpt-oss-20b", "allam-2-7b"]
             ai_text = None
@@ -340,6 +345,14 @@ def generate_sage_response(message, chat_history):
             
     # 3. Intelligent Fallback Engine
     msg_lower = message.lower()
+    if any(phrase in msg_lower for phrase in [
+        "what are you capable of", "what can you do", "what can you help",
+        "how can you help", "your capabilities", "what do you do"
+    ]):
+        return {
+            "response": "🌿 I can support mental-wellness check-ins, help you reflect on your mood, suggest simple coping exercises, support journaling, and point you to helplines. I’m an AI companion, not a substitute for professional mental-health care.",
+            "explanation": "Capability question → Described Sage's supported features and limits"
+        }
     if any(w in msg_lower for w in ['anxious', 'anxiety', 'worried', 'scared', 'panic']):
         return {
             "response": "🌬️ I hear how overwhelming things feel right now. Let's try the **5-4-3-2-1 Grounding Method**:\n\n• 5 things you can SEE 👁️\n• 4 things you can TOUCH ✋\n• 3 things you can HEAR 👂\n• 2 things you can SMELL 👃\n• 1 thing you can TASTE 👅\n\nTake a slow breath. What is one object you notice right now?",
@@ -357,8 +370,8 @@ def generate_sage_response(message, chat_history):
         }
     else:
         return {
-            "response": "🌿 I'm right here with you. Thank you for opening up. Could you tell me a little more about how you're feeling today, or what's on your mind?",
-            "explanation": "General Wellness → Open Empathetic Listening"
+            "response": "🌿 I’m Sage, and I focus on mental health and emotional well-being, so I can’t help with that topic. I can support you with mood check-ins, coping strategies, journaling, or helpline information.",
+            "explanation": "Out-of-scope or unrecognized topic → Redirected to Sage's mental-wellness purpose"
         }
 
 # ==================== SIDEBAR & NAVIGATION ====================
